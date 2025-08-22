@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Blog of LoveTheresia
 subtitle: ''
 description: '一些从小白开始学习到现在所积累的学习资料，由于博主记性相当不好，经常需要翻看知识点，所以更钟爱思维导图这种短平快的知识卡片形式,因为其中大部分资料都来自于网络，而网络上开源的博客很多，提供思维导图的却很少 ，所以我也顺便开个源，希望能帮助到你'
 keywords:
-author: John Doe
-language: en
-timezone: ''
+author: LoveTheresia
+language: zh-CN
+timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://loveTheresia.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -101,4 +101,7 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: https://github.com/loveTheresia/loveTheresia.github.io.git
+  branch: 'main'
+  token: 
