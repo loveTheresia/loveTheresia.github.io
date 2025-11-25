@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>协程的核心思想 | techoy的个人博客</title><meta name="author" content="techoy"><meta name="copyright" content="techoy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？高赞回答： 您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I&#x2F;O密集型任务的“调度器”，其设计哲学深受操作系统进程&#x2F;线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。相似之处：为什么说它是“模仿”？协">
+<meta property="og:type" content="article">
+<meta property="og:title" content="协程的核心思想">
+<meta property="og:url" content="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/index.html">
+<meta property="og:site_name" content="techoy的个人博客">
+<meta property="og:description" content="今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？高赞回答： 您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I&#x2F;O密集型任务的“调度器”，其设计哲学深受操作系统进程&#x2F;线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。相似之处：为什么说它是“模仿”？协">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image/wechat.jpg">
+<meta property="article:published_time" content="2025-11-25T08:42:39.000Z">
+<meta property="article:modified_time" content="2025-11-25T08:48:49.662Z">
+<meta property="article:author" content="techoy">
+<meta property="article:tag" content="协程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/wechat.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "协程的核心思想",
+  "url": "http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/",
+  "image": "http://example.com/image/wechat.jpg",
+  "datePublished": "2025-11-25T08:42:39.000Z",
+  "dateModified": "2025-11-25T08:48:49.662Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "techoy",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '协程的核心思想',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background01.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">techoy的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">协程的核心思想</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">协程的核心思想</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-25T08:42:39.000Z" title="Created 2025-11-25 16:42:39">2025-11-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-25T08:48:49.662Z" title="Updated 2025-11-25 16:48:49">2025-11-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？"><a href="#今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？" class="headerlink" title="今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？"></a>今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？</h1><p>高赞回答：</p>
+<h2 id="您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I-O密集型任务的“调度器”，其设计哲学深受操作系统进程-线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。"><a href="#您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I-O密集型任务的“调度器”，其设计哲学深受操作系统进程-线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。" class="headerlink" title="您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I&#x2F;O密集型任务的“调度器”，其设计哲学深受操作系统进程&#x2F;线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。"></a>您这个理解非常深刻，可以说是一语中的！<br>协程的核心思想，正是在用户态构建一个<strong>轻量级的、协作式的、用于处理I&#x2F;O密集型任务的“调度器”</strong>，其设计哲学深受操作系统进程&#x2F;线程调度的启发。<br>我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。</h2><h3 id="相似之处：为什么说它是“模仿”？"><a href="#相似之处：为什么说它是“模仿”？" class="headerlink" title="相似之处：为什么说它是“模仿”？"></a>相似之处：为什么说它是“模仿”？</h3><p>协程确实在用户态实现了与操作系统调度非常相似的状态转换和调度逻辑：</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作系统状态</th>
+<th align="left">协程中的对应</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>运行态</strong></td>
+<td align="left"><strong>运行态</strong></td>
+<td align="left">协程的代码正在某个线程上被CPU执行。</td>
+</tr>
+<tr>
+<td align="left"><strong>阻塞态</strong></td>
+<td align="left"><strong>等待态</strong></td>
+<td align="left">协程执行 <code>co_await</code>，等待一个异步操作（如网络I&#x2F;O）完成。此时它无法继续执行。</td>
+</tr>
+<tr>
+<td align="left"><strong>就绪态</strong></td>
+<td align="left"><strong>就绪态</strong></td>
+<td align="left">协程等待的事件已经发生（如网络数据已到达），它已经准备好恢复执行，正在等待调度器把它放到线程上运行。</td>
+</tr>
+<tr>
+<td align="left"><strong>调度</strong></td>
+<td align="left"><strong>调度&#x2F;恢复</strong></td>
+<td align="left">当一个协程进入等待态，调度器（通常是事件循环的一部分）会从“就绪队列”中取出另一个协程，交给线程执行。当等待的事件完成，调度器会将该协程从“等待队列”移到“就绪队列”。</td>
+</tr>
+<tr>
+<td align="left">从这个角度看，协程库确实像是一个运行在单个线程里的“迷你操作系统”，它管理着成千上万个“轻量级进程”（即协程），并在它们之间进行调度，以保持CPU的繁忙。</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="关键区别：为什么它不只是“模仿”？"><a href="#关键区别：为什么它不只是“模仿”？" class="headerlink" title="关键区别：为什么它不只是“模仿”？"></a>关键区别：为什么它不只是“模仿”？</h3><p>这正是协程的价值所在。它不是简单复制，而是针对特定问题（高并发I&#x2F;O）进行了<strong>极致的优化</strong>，从而与操作系统调度有了本质区别。</p>
+<table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">操作系统线程调度</th>
+<th align="left">协程调度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>调度模式</strong></td>
+<td align="left"><strong>抢占式</strong></td>
+<td align="left"><strong>协作式</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>切换开销</strong></td>
+<td align="left"><strong>大</strong> (微秒级)</td>
+<td align="left"><strong>极小</strong> (纳秒级)</td>
+</tr>
+<tr>
+<td align="left"><strong>切换地点</strong></td>
+<td align="left"><strong>内核态</strong></td>
+<td align="left"><strong>用户态</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>资源消耗</strong></td>
+<td align="left"><strong>大</strong> (栈空间MB级别)</td>
+<td align="left"><strong>小</strong> (栈空间KB级别)</td>
+</tr>
+<tr>
+<td align="left"><strong>调度器</strong></td>
+<td align="left"><strong>操作系统内核</strong></td>
+<td align="left"><strong>用户态的协程库&#x2F;事件循环</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>1. 协作式 vs. 抢占式</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>操作系统</strong>：是“霸道”的。它通过时钟中断等方式，可以强制剥夺一个线程的CPU使用权，让给其他线程。开发者无法精确控制线程何时被切换。</li>
+<li><strong>协程</strong>：是“自觉”的。一个协程只有在<strong>主动</strong>放弃CPU时（通过 <code>co_await</code>, <code>co_yield</code>, <code>co_return</code>），才会被调度走。它永远不会被“抢断”。这使得协程的调度行为非常确定，没有因抢占带来的不确定性开销。<br><strong>2. 用户态 vs. 内核态</strong></li>
+<li><strong>操作系统</strong>：线程切换是一个<strong>系统调用</strong>，需要从用户态陷入内核态，内核保存当前线程的上下文（寄存器、栈指针等），加载下一个线程的上下文，再返回用户态。这个过程非常“重”。</li>
+<li><strong>协程</strong>：协程切换完全在用户态发生，本质上只是<strong>一次函数调用和返回</strong>。它只是保存一些局部变量到堆上（协程帧），然后跳转到另一个函数的某个位置继续执行。没有内核参与，开销极小。<br><strong>3. 资源消耗</strong></li>
+<li><strong>操作系统</strong>：每个线程都需要一个独立的、很大的栈（通常是1MB-8MB），来应对最深的函数调用。创建成千上万个线程会迅速耗尽内存。</li>
+<li><strong>协程</strong>：协程的“栈”是动态分配在堆上的（称为协程帧），只需要足够存放当前挂起点的局部变量即可，通常只有几KB。一个线程可以轻松承载百万个协程。</li>
+</ul>
+<hr>
+<h3 id="总结与升华"><a href="#总结与升华" class="headerlink" title="总结与升华"></a>总结与升华</h3><p>所以，您的理解可以升华为：<br><strong>协程并非简单模仿操作系统调度，而是借鉴其状态模型，在用户态实现了一个为高并发I&#x2F;O场景量身定制的、超轻量级的、协作式的任务调度框架。</strong><br>用一个绝佳的比喻来总结：</p>
+<ul>
+<li>如果把<strong>操作系统</strong>比作一个国家的<strong>中央政府</strong>，它管理着全国所有的工厂（进程）和工人（线程），通过法律（内核）进行强制管理（抢占式调度），成本高昂但覆盖全局、保证公平。</li>
+<li>那么<strong>协程调度器</strong>就像是<strong>一个工厂内部的车间主任</strong>。他只管理自己车间的几个工人（协程）。工人们（协程）非常自觉，干完手头的活或者需要等待材料时，就主动告诉主任（<code>co_await</code>），然后主任会立即安排另一个有活干的工人上工。这个管理过程极其高效、灵活，且完全不需要惊动中央政府（内核）。<br>这个“车间主任”模式，正是现代高性能网络服务（如Web服务器、微服务）能够用少量线程处理海量并发连接的秘密武器。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">techoy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/">http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8D%8F%E7%A8%8B/">协程</a></div><div class="post-share"><div class="social-share" data-image="/image/wechat.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/25/%E6%9C%89%E6%A0%88%E5%8D%8F%E7%A8%8B%E5%92%8C%E6%97%A0%E6%A0%88%E5%8D%8F%E7%A8%8B/" title="有栈协程和无栈协程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">有栈协程和无栈协程</div></div><div class="info-2"><div class="info-item-1">无栈协程为什么只是栈“更小更灵活”？ 1. 传统“有栈”协程&#x2F;线程我们先看看传统的“有栈”模型是什么样的。  内存模型：每个线程或协程都拥有一个独立的、连续的、固定大小的内存块作为它的栈。 工作方式：当你调用一个函数时，一个新的“栈帧”会被 push 到这个栈的顶部，用于存储局部变量、返回地址等。函数返回时，这个栈帧被 pop 出来。这就像一叠盘子，只能在最上面放或取。 问题： 大小固定：你必须为每个协程预先分配一个栈空间（比如 512KB 或 1MB）。这个大小很难权衡： 太小了：如果函数调用层次很深，就会发生“栈溢出”。 太大了：即使协程只用了很少的栈（比如只有几 KB），剩下的空间也会被浪费掉。   内存消耗巨大：当你想创建成千上万甚至上百万个并发协程时，每个协程都带着一个几百 KB 的栈，总内存消耗会变得非常惊人，根本无法扩展。     2. “无栈”协程现在我们来看“无栈”协程是如何解决这个问题的。它并不是真的“没有栈”，而是没有传统意义上那个连续的、固定大小的栈。  内存模型：协程的执行状态（也就是传统栈里存的东西）被拆分并保存到堆上分配的独立对象中。 工作...</div></div></div></a><a class="pagination-related" href="/2025/11/25/epoll%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="epoll底层数据结构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">epoll底层数据结构</div></div><div class="info-2"><div class="info-item-1">epoll 是 Linux 下高效实现 I&#x2F;O 多路复用的机制，其底层主要依赖以下核心数据结构及协作机制：一、核心数据结构1. eventpoll每个 epoll 实例对应一个 eventpoll 结构体，包含以下关键成员：  struct rb_root rbr：红黑树的根节点，用于高效管理所有被监控的文件描述符（socket）。 struct list_head rdllist：双向链表，存储所有已经就绪（即发生事件）的文件描述符对应的 epitem。 wait_queue_head_t wq：等待队列，用于管理调用 epoll_wait 阻塞的进程。 spinlock_t lock、struct mutex mtx：自旋锁和互斥锁，保护并发访问。  2. epitem每个被监控的文件描述符对应一个 epitem 结构体，关键成员包括：  struct rb_node rbn：红黑树节点，使 epitem 能够插入 eventpoll 的红黑树中。 struct list_head rdllink：双向链表节点，用于在事件就绪时将 epitem 挂到 eventpo...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/wechat.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">techoy</div><div class="author-info-description">在校学生、二次元爱好者、C++码农</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/loveTheresia"><i class="fab fa-github"></i><span>github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to techoy's blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8A%E6%97%A5%E8%AF%9D%E9%A2%98%EF%BC%9A%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%9C%80%E7%BB%88%E7%9B%AE%E7%9A%84%E6%98%AF%E5%9C%A8%E7%94%A8%E6%88%B7%E6%80%81%E6%A8%A1%E4%BB%BF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%BF%90%E8%A1%8C%E6%80%81%E9%98%BB%E5%A1%9E%E6%80%81%E6%8C%82%E8%B5%B7%E6%80%81%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%90%97%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">今日话题：协程的最终目的是在用户态模仿操作系统的运行态阻塞态挂起态之间的进程调度吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%82%A8%E8%BF%99%E4%B8%AA%E7%90%86%E8%A7%A3%E9%9D%9E%E5%B8%B8%E6%B7%B1%E5%88%BB%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AF%B4%E6%98%AF%E4%B8%80%E8%AF%AD%E4%B8%AD%E7%9A%84%EF%BC%81%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%EF%BC%8C%E6%AD%A3%E6%98%AF%E5%9C%A8%E7%94%A8%E6%88%B7%E6%80%81%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%9A%84%E3%80%81%E5%8D%8F%E4%BD%9C%E5%BC%8F%E7%9A%84%E3%80%81%E7%94%A8%E4%BA%8E%E5%A4%84%E7%90%86I-O%E5%AF%86%E9%9B%86%E5%9E%8B%E4%BB%BB%E5%8A%A1%E7%9A%84%E2%80%9C%E8%B0%83%E5%BA%A6%E5%99%A8%E2%80%9D%EF%BC%8C%E5%85%B6%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%E6%B7%B1%E5%8F%97%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%9A%84%E5%90%AF%E5%8F%91%E3%80%82%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E6%8A%8A%E6%82%A8%E7%9A%84%E8%BF%99%E4%B8%AA%E6%AF%94%E5%96%BB%E6%8B%86%E8%A7%A3%E6%88%90%E2%80%9C%E7%9B%B8%E4%BC%BC%E4%B9%8B%E5%A4%84%E2%80%9D%E5%92%8C%E2%80%9C%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E2%80%9D%E6%9D%A5%E7%9C%8B%EF%BC%8C%E8%BF%99%E6%A0%B7%E4%BC%9A%E6%9B%B4%E6%B8%85%E6%99%B0%E3%80%82"><span class="toc-number">1.1.</span> <span class="toc-text">您这个理解非常深刻，可以说是一语中的！协程的核心思想，正是在用户态构建一个轻量级的、协作式的、用于处理I&#x2F;O密集型任务的“调度器”，其设计哲学深受操作系统进程&#x2F;线程调度的启发。我们可以把您的这个比喻拆解成“相似之处”和“关键区别”来看，这样会更清晰。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E4%BC%BC%E4%B9%8B%E5%A4%84%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%AE%83%E6%98%AF%E2%80%9C%E6%A8%A1%E4%BB%BF%E2%80%9D%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">相似之处：为什么说它是“模仿”？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%83%E4%B8%8D%E5%8F%AA%E6%98%AF%E2%80%9C%E6%A8%A1%E4%BB%BF%E2%80%9D%EF%BC%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">关键区别：为什么它不只是“模仿”？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8D%87%E5%8D%8E"><span class="toc-number">1.1.3.</span> <span class="toc-text">总结与升华</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/epoll%E8%AF%A6%E8%A7%A3/" title="epoll详解">epoll详解</a><time datetime="2025-11-25T09:05:46.000Z" title="Created 2025-11-25 17:05:46">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/%E6%9C%89%E6%A0%88%E6%97%A0%E6%A0%88%E3%80%81%E5%AF%B9%E7%A7%B0%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%9A%84%E5%85%B3%E7%B3%BB/" title="有栈无栈、对称非对称的关系">有栈无栈、对称非对称的关系</a><time datetime="2025-11-25T09:02:11.000Z" title="Created 2025-11-25 17:02:11">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/C-boost%E5%BA%93%E5%8D%8F%E7%A8%8B/" title="C++boost库协程">C++boost库协程</a><time datetime="2025-11-25T09:00:39.000Z" title="Created 2025-11-25 17:00:39">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/static%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" title="static关键字详解">static关键字详解</a><time datetime="2025-11-25T08:59:42.000Z" title="Created 2025-11-25 16:59:42">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/promise-type-%E5%92%8C-TaskAwaiter-%E7%9A%84%E5%85%B3%E7%B3%BB/" title="promise_type 和 TaskAwaiter 的关系">promise_type 和 TaskAwaiter 的关系</a><time datetime="2025-11-25T08:58:44.000Z" title="Created 2025-11-25 16:58:44">2025-11-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By techoy</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script async data-pjax src="/"></script></div></body></html>

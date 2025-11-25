@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>线程与进程的关系 | techoy的个人博客</title><meta name="author" content="techoy"><meta name="copyright" content="techoy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。1. 进程是资源分配的基本单位（工厂车间）当你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程与进程的关系">
+<meta property="og:url" content="http://example.com/2025/11/25/%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:site_name" content="techoy的个人博客">
+<meta property="og:description" content="我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。1. 进程是资源分配的基本单位（工厂车间）当你">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image/wechat.jpg">
+<meta property="article:published_time" content="2025-11-25T07:44:12.000Z">
+<meta property="article:modified_time" content="2025-11-25T07:44:55.029Z">
+<meta property="article:author" content="techoy">
+<meta property="article:tag" content="线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/wechat.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "线程与进程的关系",
+  "url": "http://example.com/2025/11/25/%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB/",
+  "image": "http://example.com/image/wechat.jpg",
+  "datePublished": "2025-11-25T07:44:12.000Z",
+  "dateModified": "2025-11-25T07:44:55.029Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "techoy",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/25/%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '线程与进程的关系',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background01.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">techoy的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">线程与进程的关系</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">线程与进程的关系</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-25T07:44:12.000Z" title="Created 2025-11-25 15:44:12">2025-11-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-25T07:44:55.029Z" title="Updated 2025-11-25 15:44:55">2025-11-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？"><a href="#我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？" class="headerlink" title="我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？"></a>我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？</h1><h2 id="这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。"><a href="#这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。" class="headerlink" title="这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。"></a>这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。<br>想象一下，<strong>一个进程就像一个正在运营的“工厂车间”</strong>，而<strong>线程就是这个车间里的“工人”</strong>。</h2><h3 id="1-进程是资源分配的基本单位（工厂车间）"><a href="#1-进程是资源分配的基本单位（工厂车间）" class="headerlink" title="1. 进程是资源分配的基本单位（工厂车间）"></a>1. 进程是资源分配的基本单位（工厂车间）</h3><p>当你双击一个程序（比如Word）时，操作系统说：“好的，要开一个Word车间了！” 它会做什么呢？<br>它不会只给Word程序一小块内存，而是会<strong>一次性分配一整套独立的资源</strong>，来保证这个“Word车间”能正常运作。这套资源包括：</p>
+<ul>
+<li><strong>独立的内存空间</strong>：就像给车间划了一块专属的地皮，里面有仓库（存放代码）、原料区（存放数据）、工作台（堆栈）。其他车间（比如Chrome浏览器）不能随便进来拿东西。</li>
+<li><strong>文件句柄</strong>：车间要存取文件，操作系统会给它一把钥匙（文件句柄），让它能打开和操作特定的文件。</li>
+<li><strong>网络端口</strong>：如果车间需要联网（比如在线保存文档），操作系统会分配给它专属的网络通道。</li>
+<li><strong>其他系统资源</strong>：比如打印机权限、窗口显示等等。<br><strong>关键点在于</strong>：操作系统进行资源分配时，是<strong>以“进程”这个整体为单位的</strong>。它把一整套资源打包，分配给一个进程，而不是分配给进程内部的某个小部分。<br><strong>所以，“进程是资源分配的基本单位”这句话，就可以理解为：操作系统这个“工厂大老板”，是把资源（内存、文件等）一整批一整批地分配给“车间”（进程）的。</strong></li>
+</ul>
+<hr>
+<h3 id="2-线程是CPU调度的基本单位（车间里的工人）"><a href="#2-线程是CPU调度的基本单位（车间里的工人）" class="headerlink" title="2. 线程是CPU调度的基本单位（车间里的工人）"></a>2. 线程是CPU调度的基本单位（车间里的工人）</h3><p>现在，“Word车间”已经建好了，资源也到位了。但车间自己不会干活，得有<strong>工人</strong>才行。这些工人就是<strong>线程</strong>。</p>
+<ul>
+<li>一个车间至少要有一个工人（<strong>主线程</strong>），否则就是个空车间。</li>
+<li>复杂的车间可以有多个工人（<strong>多线程</strong>），分工合作，提高效率。<br>比如，在Word这个“车间”里：</li>
+<li><strong>工人A（UI线程）</strong>：负责响应用户的打字、点击，让界面不卡顿。</li>
+<li><strong>工人B（后台保存线程）</strong>：负责每隔一分钟自动保存文档。</li>
+<li><strong>工人C（拼写检查线程）</strong>：负责在后台默默检查你有没有拼错单词。<br>现在，我们来看<strong>CPU</strong>。CPU就像工厂里<strong>一台性能超强、但同一时间只能一个人用的“核心机器”</strong>（比如一个精密加工中心）。<br>操作系统这个“车间主任”要安排谁去用这台机器呢？</li>
+<li>它不会对整个“Word车间”说：“你去用CPU吧！”——这太模糊了，车间不会干活。</li>
+<li>它会直接对**某个具体的“工人”**说：“工人A，现在轮到你，去CPU上干10毫秒的活！”</li>
+<li>10毫秒后，主任可能会说：“好了，工人A你先歇着，工人B，现在你去CPU上干10毫秒！”<br>这个“轮到谁去使用CPU”的决定过程，就是<strong>CPU调度</strong>。<br><strong>所以，“线程是CPU调度的基本单位”这句话，就可以理解为：操作系统这个“车间主任”，安排使用CPU这台“核心机器”的最小单位，是“工人”（线程），而不是“车间”（进程）。</strong></li>
+</ul>
+<hr>
+<h3 id="总结与对比"><a href="#总结与对比" class="headerlink" title="总结与对比"></a>总结与对比</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">进程</th>
+<th align="left">线程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>比喻</strong></td>
+<td align="left">工厂车间</td>
+<td align="left">车间里的工人</td>
+</tr>
+<tr>
+<td align="left"><strong>核心职责</strong></td>
+<td align="left"><strong>资源的容器</strong>，拥有独立的资源</td>
+<td align="left"><strong>执行的单位</strong>，真正干活</td>
+</tr>
+<tr>
+<td align="left"><strong>资源分配</strong></td>
+<td align="left"><strong>是基本单位</strong>。操作系统分配内存、文件等资源给它。</td>
+<td align="left"><strong>不拥有资源</strong>（除了极少量的栈和寄存器），它共享所属进程的所有资源。</td>
+</tr>
+<tr>
+<td align="left"><strong>CPU调度</strong></td>
+<td align="left"><strong>不是基本单位</strong>。进程本身不能被调度执行。</td>
+<td align="left"><strong>是基本单位</strong>。CPU真正执行的是线程的指令。</td>
+</tr>
+<tr>
+<td align="left"><strong>独立性</strong></td>
+<td align="left">进程间相互独立，一个进程崩溃通常不影响其他进程。</td>
+<td align="left">同一进程内的线程共享资源，一个线程崩溃可能导致整个进程崩溃。</td>
+</tr>
+<tr>
+<td align="left"><strong>通信</strong></td>
+<td align="left">复杂，需要专门的“进程间通信”（IPC）机制。</td>
+<td align="left">简单，可以直接读写共享的内存变量。</td>
+</tr>
+<tr>
+<td align="left"><strong>开销</strong></td>
+<td align="left">创建、销毁、切换的开销都很大（要分配&#x2F;回收整套资源）。</td>
+<td align="left">创建、销毁、切换的开销小得多（只是换个工人干活）。</td>
+</tr>
+</tbody></table>
+<h3 id="一个现实的例子：你的浏览器"><a href="#一个现实的例子：你的浏览器" class="headerlink" title="一个现实的例子：你的浏览器"></a>一个现实的例子：你的浏览器</h3><p>当你打开Chrome浏览器时：</p>
+<ol>
+<li><strong>Chrome主程序</strong>本身是一个<strong>进程</strong>，它获得了屏幕、网络等基础资源。</li>
+<li>你每打开一个<strong>标签页</strong>，Chrome通常会为它创建一个新的<strong>进程</strong>。为什么？为了<strong>资源隔离</strong>！这个标签页崩溃了（比如某个网页有bug），不会影响到其他标签页和整个浏览器。这就是“进程作为资源分配单位”的体现——每个标签页都有自己独立的内存“地皮”。</li>
+<li>在<strong>单个标签页（一个进程）<strong>内部，可能有多个</strong>线程</strong>在工作：<ul>
+<li>一个<strong>UI线程</strong>负责绘制网页、响应你的滚动和点击。</li>
+<li>一个<strong>JS引擎线程</strong>负责执行JavaScript代码。</li>
+<li>多个<strong>网络线程</strong>负责下载图片、CSS文件等。<br>当你观看视频时，UI线程在让你能拖动进度条，网络线程在缓冲下一秒的内容，而CPU则在飞速地切换调度这些线程，让它们“轮流”工作，最终给你一个流畅的体验。这就是“线程作为CPU调度单位”的体现。<br>希望这个“工厂车间和工人”的比喻，能帮你把这两个概念彻底打通！</li>
+</ul>
+</li>
+</ol>
+<h1 id="所以操作系统关注进程的运行，CPU关注线程的运行，这对吗"><a href="#所以操作系统关注进程的运行，CPU关注线程的运行，这对吗" class="headerlink" title="所以操作系统关注进程的运行，CPU关注线程的运行，这对吗"></a>所以操作系统关注进程的运行，CPU关注线程的运行，这对吗</h1><h2 id="这个说法非常精辟，抓住了核心思想！我们可以把它说得更精确一点，这样就能彻底厘清它们之间的关系。你的理解是对的，但有一个关键环节需要补充：操作系统是那个“指挥官”，它指挥CPU去关注线程。我们来分解一下："><a href="#这个说法非常精辟，抓住了核心思想！我们可以把它说得更精确一点，这样就能彻底厘清它们之间的关系。你的理解是对的，但有一个关键环节需要补充：操作系统是那个“指挥官”，它指挥CPU去关注线程。我们来分解一下：" class="headerlink" title="这个说法非常精辟，抓住了核心思想！我们可以把它说得更精确一点，这样就能彻底厘清它们之间的关系。你的理解是对的，但有一个关键环节需要补充：操作系统是那个“指挥官”，它指挥CPU去关注线程。我们来分解一下："></a>这个说法非常精辟，抓住了核心思想！我们可以把它说得更精确一点，这样就能彻底厘清它们之间的关系。<br>你的理解是对的，但有一个关键环节需要补充：<strong>操作系统是那个“指挥官”，它指挥CPU去关注线程。</strong><br>我们来分解一下：</h2><h3 id="1-操作系统关注进程的“生死”和“家当”"><a href="#1-操作系统关注进程的“生死”和“家当”" class="headerlink" title="1. 操作系统关注进程的“生死”和“家当”"></a>1. 操作系统关注进程的“生死”和“家当”</h3><p>是的，操作系统的核心职责之一是<strong>管理进程</strong>。它像一个“大管家”，关心的是宏观层面的事情：</p>
+<ul>
+<li><strong>创建与销毁</strong>：你双击一个图标，操作系统就负责创建一个新进程，给它分配“家当”（资源）。你关闭程序，操作系统就负责收回所有资源，销毁这个进程。</li>
+<li><strong>资源分配与保护</strong>：操作系统确保每个进程都有自己独立的内存空间，防止A进程的“工人”跑到B进程的“仓库”里搞破坏。它管理着所有进程对文件、网络、设备等资源的访问权限。</li>
+<li><strong>进程间通信</strong>：如果两个“车间”（进程）需要合作，操作系统要提供专门的“对讲机”（IPC机制），让它们能安全地交换信息。<br><strong>在这个层面，操作系统不太关心某个进程内部具体是哪个“工人”在干活，它只关心这个“车间”本身是否健康、资源是否够用、有没有违规操作。</strong></li>
+</ul>
+<hr>
+<h3 id="2-CPU关注线程的“具体动作”"><a href="#2-CPU关注线程的“具体动作”" class="headerlink" title="2. CPU关注线程的“具体动作”"></a>2. CPU关注线程的“具体动作”</h3><p>是的，CPU是最终的“执行者”，它只懂最底层的指令。它的视角非常微观和“短视”：</p>
+<ul>
+<li><strong>执行指令流</strong>：CPU在任何一个瞬间，都只是在执行一条来自某个线程的指令。它有自己的“工作台”（寄存器），上面放着当前正在处理的“零件”（数据）和“图纸”（指令）。</li>
+<li><strong>上下文切换</strong>：当操作系统说“停，换下一个工人”时，CPU会保存当前这个“工人”（线程A）的工作状态（把寄存器等信息存起来），然后加载下一个“工人”（线程B）的工作状态，接着开始执行线程B的指令。这个过程对CPU来说，就是一次机械的、快速的切换。<br><strong>CPU本身没有“进程”这个概念。它不知道自己当前执行的指令属于哪个进程，它只知道自己在执行一个“线程上下文”。</strong></li>
+</ul>
+<hr>
+<h3 id="关键的连接点：操作系统的调度器"><a href="#关键的连接点：操作系统的调度器" class="headerlink" title="关键的连接点：操作系统的调度器"></a>关键的连接点：操作系统的调度器</h3><p>那么，CPU怎么知道下一个该执行哪个线程呢？<br><strong>是操作系统的“调度器”这个组件在背后指挥。</strong></p>
+<ol>
+<li>操作系统维护着一个**“就绪线程队列”**，里面放着所有准备好可以上CPU干活的线程（来自各个不同的进程）。</li>
+<li>调度器根据一套复杂的算法（比如优先级、时间片等），从这个队列里挑选一个“幸运”的线程。</li>
+<li>调度器对CPU下达指令：“嘿，CPU，现在轮到这个线程了，请加载它的上下文并开始执行。”</li>
+<li>CPU就乖乖地照做。<br>所以，整个流程是这样的：<br><strong>操作系统（大管家）</strong> -&gt; 管理着多个 <strong>进程（车间）</strong> -&gt; 每个进程里有多个 <strong>线程（工人）</strong> -&gt; <strong>操作系统的调度器（生产主管）</strong> 从所有工人中挑选一个 -&gt; <strong>CPU（核心机器）</strong> 执行这个被选中的工人。</li>
+</ol>
+<hr>
+<h3 id="结论与精确表述"><a href="#结论与精确表述" class="headerlink" title="结论与精确表述"></a>结论与精确表述</h3><p>所以，你的说法非常接近本质。我们可以把它打磨得更精确：</p>
+<ul>
+<li><strong>操作系统</strong>：以<strong>进程</strong>为单位进行<strong>资源管理</strong>，并以<strong>线程</strong>为单位来<strong>指挥CPU工作</strong>。</li>
+<li><strong>CPU</strong>：作为执行单元，它只关注并执行<strong>操作系统为它选定的线程</strong>的指令。<br>简单来说：</li>
+<li><strong>问谁要资源？找操作系统，它看你是哪个“进程”。</strong></li>
+<li><strong>谁来真正干活？是CPU，但它只听操作系统的，操作系统让它干哪个“线程”的活，它就干哪个。</strong><br>你已经把这两个最核心的概念的职责分得非常清楚了，这为你深入学习操作系统打下了坚实的基础！</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">techoy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/25/%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB/">http://example.com/2025/11/25/%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BA%BF%E7%A8%8B/">线程</a></div><div class="post-share"><div class="social-share" data-image="/image/wechat.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/25/%E6%96%87%E4%BB%B6%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0/" title="文件作用域原理简述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">文件作用域原理简述</div></div><div class="info-2"><div class="info-item-1">1. 什么是文件作用域？文件作用域（File Scope） 是指在C&#x2F;C++等编程语言中，一个变量或函数定义在所有代码块（如函数、{}代码块）之外，那么它从定义处开始，直到所在源文件的末尾，都是可见和可访问的。    文件作用域的标识符（变量或函数）通常称为“全局变量”或“全局函数”。 若用 static 修饰，则其作用域被限制在当前文件，不可被其他文件访问（称为内部链接）。 若无 static，则其作用域覆盖整个文件，且可被其他文件通过 extern 声明后访问（称为外部链接）。 参考示例：   12int globalVar = 10;  // 文件作用域，默认外部链接static int staticVar = 5; // 文件作用域，但仅限本文件    2. 编译器如何检测文件作用域？编译器在语义分析阶段，主要通过符号表（Symbol Table） 和作用域链（Scope Chain） 来检测文件作用域。具体过程如下： （1）符号表记录与作用域链 符号表是编译器用于记录标识符（变量、函数等）及其属性（如类型、作用域、链接属性等）的数据结构。 编译器会为每个源文件...</div></div></div></a><a class="pagination-related" href="/2025/11/25/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E4%B8%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%8A%A3/" title="多进程与多线程优劣"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">多进程与多线程优劣</div></div><div class="info-2"><div class="info-item-1">选择进程还是线程，本质上是在**“隔离性”和“效率”**之间做权衡。让我们用一个决策表来清晰地对比，然后给出具体的场景建议。核心权衡：隔离性 vs. 效率   特性 进程 线程 权衡分析    资源开销 高。创建时需要分配独立的内存空间等资源，销毁时需要回收。 低。共享进程的资源，创建和销毁只是分配一小部分栈空间，速度极快。 线程胜出。如果需要大量创建销毁，线程是唯一选择。   通信方式 复杂但安全。必须使用IPC（管道、消息队列、共享内存、套接字等）。 简单但危险。直接读写共享变量（如全局变量）。需要加锁等同步机制来避免冲突。 线程在开发上更简单，但风险更高；进程在数据安全上更可靠。   稳定性与隔离 高。一个进程崩溃通常不影响其他进程。内存受保护，无法随意访问其他进程数据。 低。一个线程崩溃（如非法内存访问）会导致整个进程崩溃。所有线程共享内存，一个线程的bug可能污染所有数据。 进程胜出。这是进程最大的优势，提供了“不把鸡蛋放在一个篮子里”的容错能力。   扩展性（多核CPU） 好。可以将不同进程分布到不同CPU核心上，实现真正的并行。 好。同一进程内的不同线程也可以被调度...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/wechat.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">techoy</div><div class="author-info-description">在校学生、二次元爱好者、C++码农</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/loveTheresia"><i class="fab fa-github"></i><span>github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to techoy's blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E7%90%86%E8%A7%A3%E4%BA%86%E8%BF%9B%E7%A8%8B%E5%8F%AF%E4%BB%A5%E7%9C%8B%E4%BD%9C%E6%AD%A3%E5%9C%A8%E8%BF%9B%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F%EF%BC%8C%E9%82%A3%E4%B9%88%E5%A6%82%E4%BD%95%E6%8D%AE%E6%AD%A4%E7%90%86%E8%A7%A3%E8%BF%9B%E7%A8%8B%E6%98%AF%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%8C%E7%BA%BF%E7%A8%8B%E6%98%AFCPU%E8%B0%83%E5%BA%A6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">我们理解了进程可以看作正在进行的程序，那么如何据此理解进程是资源分配的基本单位，线程是CPU调度的基本单位？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E9%97%AE%E5%BE%97%E9%9D%9E%E5%B8%B8%E5%A5%BD%EF%BC%8C%E5%AE%83%E6%AD%A3%E5%A5%BD%E8%A7%A6%E5%8F%8A%E4%BA%86%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5%E3%80%82%E4%BD%A0%E5%B7%B2%E7%BB%8F%E6%8E%8C%E6%8F%A1%E4%BA%86%E2%80%9C%E8%BF%9B%E7%A8%8B%E6%98%AF%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F%E2%80%9D%E8%BF%99%E4%B8%AA%E5%9F%BA%E7%A1%80%EF%BC%8C%E7%8E%B0%E5%9C%A8%E6%88%91%E4%BB%AC%E5%B0%B1%E5%9C%A8%E8%BF%99%E4%B8%AA%E5%9F%BA%E7%A1%80%E4%B8%8A%EF%BC%8C%E7%94%A8%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E5%BD%A2%E8%B1%A1%E7%9A%84%E6%AF%94%E5%96%BB%E6%9D%A5%E6%8B%86%E8%A7%A3%E8%BF%99%E4%B8%A4%E4%B8%AA%E6%A6%82%E5%BF%B5%E3%80%82%E6%83%B3%E8%B1%A1%E4%B8%80%E4%B8%8B%EF%BC%8C%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E5%B0%B1%E5%83%8F%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%90%A5%E7%9A%84%E2%80%9C%E5%B7%A5%E5%8E%82%E8%BD%A6%E9%97%B4%E2%80%9D%EF%BC%8C%E8%80%8C%E7%BA%BF%E7%A8%8B%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA%E8%BD%A6%E9%97%B4%E9%87%8C%E7%9A%84%E2%80%9C%E5%B7%A5%E4%BA%BA%E2%80%9D%E3%80%82"><span class="toc-number">1.1.</span> <span class="toc-text">这个问题问得非常好，它正好触及了操作系统的核心设计理念。你已经掌握了“进程是正在运行的程序”这个基础，现在我们就在这个基础上，用一个非常形象的比喻来拆解这两个概念。想象一下，一个进程就像一个正在运营的“工厂车间”，而线程就是这个车间里的“工人”。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E6%98%AF%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%88%E5%B7%A5%E5%8E%82%E8%BD%A6%E9%97%B4%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. 进程是资源分配的基本单位（工厂车间）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BA%BF%E7%A8%8B%E6%98%AFCPU%E8%B0%83%E5%BA%A6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%88%E8%BD%A6%E9%97%B4%E9%87%8C%E7%9A%84%E5%B7%A5%E4%BA%BA%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. 线程是CPU调度的基本单位（车间里的工人）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.3.</span> <span class="toc-text">总结与对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%8E%B0%E5%AE%9E%E7%9A%84%E4%BE%8B%E5%AD%90%EF%BC%9A%E4%BD%A0%E7%9A%84%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">一个现实的例子：你的浏览器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%80%E4%BB%A5%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%85%B3%E6%B3%A8%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%EF%BC%8CCPU%E5%85%B3%E6%B3%A8%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%EF%BC%8C%E8%BF%99%E5%AF%B9%E5%90%97"><span class="toc-number">2.</span> <span class="toc-text">所以操作系统关注进程的运行，CPU关注线程的运行，这对吗</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E4%B8%AA%E8%AF%B4%E6%B3%95%E9%9D%9E%E5%B8%B8%E7%B2%BE%E8%BE%9F%EF%BC%8C%E6%8A%93%E4%BD%8F%E4%BA%86%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%EF%BC%81%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E6%8A%8A%E5%AE%83%E8%AF%B4%E5%BE%97%E6%9B%B4%E7%B2%BE%E7%A1%AE%E4%B8%80%E7%82%B9%EF%BC%8C%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%83%BD%E5%BD%BB%E5%BA%95%E5%8E%98%E6%B8%85%E5%AE%83%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E3%80%82%E4%BD%A0%E7%9A%84%E7%90%86%E8%A7%A3%E6%98%AF%E5%AF%B9%E7%9A%84%EF%BC%8C%E4%BD%86%E6%9C%89%E4%B8%80%E4%B8%AA%E5%85%B3%E9%94%AE%E7%8E%AF%E8%8A%82%E9%9C%80%E8%A6%81%E8%A1%A5%E5%85%85%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E9%82%A3%E4%B8%AA%E2%80%9C%E6%8C%87%E6%8C%A5%E5%AE%98%E2%80%9D%EF%BC%8C%E5%AE%83%E6%8C%87%E6%8C%A5CPU%E5%8E%BB%E5%85%B3%E6%B3%A8%E7%BA%BF%E7%A8%8B%E3%80%82%E6%88%91%E4%BB%AC%E6%9D%A5%E5%88%86%E8%A7%A3%E4%B8%80%E4%B8%8B%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">这个说法非常精辟，抓住了核心思想！我们可以把它说得更精确一点，这样就能彻底厘清它们之间的关系。你的理解是对的，但有一个关键环节需要补充：操作系统是那个“指挥官”，它指挥CPU去关注线程。我们来分解一下：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%85%B3%E6%B3%A8%E8%BF%9B%E7%A8%8B%E7%9A%84%E2%80%9C%E7%94%9F%E6%AD%BB%E2%80%9D%E5%92%8C%E2%80%9C%E5%AE%B6%E5%BD%93%E2%80%9D"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. 操作系统关注进程的“生死”和“家当”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CPU%E5%85%B3%E6%B3%A8%E7%BA%BF%E7%A8%8B%E7%9A%84%E2%80%9C%E5%85%B7%E4%BD%93%E5%8A%A8%E4%BD%9C%E2%80%9D"><span class="toc-number">2.1.2.</span> <span class="toc-text">2. CPU关注线程的“具体动作”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%82%B9%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">2.1.3.</span> <span class="toc-text">关键的连接点：操作系统的调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA%E4%B8%8E%E7%B2%BE%E7%A1%AE%E8%A1%A8%E8%BF%B0"><span class="toc-number">2.1.4.</span> <span class="toc-text">结论与精确表述</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/epoll%E8%AF%A6%E8%A7%A3/" title="epoll详解">epoll详解</a><time datetime="2025-11-25T09:05:46.000Z" title="Created 2025-11-25 17:05:46">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/%E6%9C%89%E6%A0%88%E6%97%A0%E6%A0%88%E3%80%81%E5%AF%B9%E7%A7%B0%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%9A%84%E5%85%B3%E7%B3%BB/" title="有栈无栈、对称非对称的关系">有栈无栈、对称非对称的关系</a><time datetime="2025-11-25T09:02:11.000Z" title="Created 2025-11-25 17:02:11">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/C-boost%E5%BA%93%E5%8D%8F%E7%A8%8B/" title="C++boost库协程">C++boost库协程</a><time datetime="2025-11-25T09:00:39.000Z" title="Created 2025-11-25 17:00:39">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/static%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" title="static关键字详解">static关键字详解</a><time datetime="2025-11-25T08:59:42.000Z" title="Created 2025-11-25 16:59:42">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/promise-type-%E5%92%8C-TaskAwaiter-%E7%9A%84%E5%85%B3%E7%B3%BB/" title="promise_type 和 TaskAwaiter 的关系">promise_type 和 TaskAwaiter 的关系</a><time datetime="2025-11-25T08:58:44.000Z" title="Created 2025-11-25 16:58:44">2025-11-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By techoy</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script async data-pjax src="/"></script></div></body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络应用层知识清单 | techoy的个人博客</title><meta name="author" content="techoy"><meta name="copyright" content="techoy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="后端开发常见应用层协议模块拆分与学习路径后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块：1. Web服务协议模块1.1 HTTP协议族 HTTP&#x2F;1.1： 核心机制：请求&#x2F;响应模型、无状态、长连接（Keep-Alive）、管道化。 学习重点：头部字段、状态码、缓存机制、安全头（CORS、CSP）。   HTTP&#x2F;2： 核心机制：多路复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络应用层知识清单">
+<meta property="og:url" content="http://example.com/2025/11/25/%E5%BA%94%E7%94%A8%E5%B1%82%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95/index.html">
+<meta property="og:site_name" content="techoy的个人博客">
+<meta property="og:description" content="后端开发常见应用层协议模块拆分与学习路径后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块：1. Web服务协议模块1.1 HTTP协议族 HTTP&#x2F;1.1： 核心机制：请求&#x2F;响应模型、无状态、长连接（Keep-Alive）、管道化。 学习重点：头部字段、状态码、缓存机制、安全头（CORS、CSP）。   HTTP&#x2F;2： 核心机制：多路复">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image/wechat.jpg">
+<meta property="article:published_time" content="2025-11-25T08:12:14.000Z">
+<meta property="article:modified_time" content="2025-11-25T08:48:08.860Z">
+<meta property="article:author" content="techoy">
+<meta property="article:tag" content="原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/wechat.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算机网络应用层知识清单",
+  "url": "http://example.com/2025/11/25/%E5%BA%94%E7%94%A8%E5%B1%82%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95/",
+  "image": "http://example.com/image/wechat.jpg",
+  "datePublished": "2025-11-25T08:12:14.000Z",
+  "dateModified": "2025-11-25T08:48:08.860Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "techoy",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/25/%E5%BA%94%E7%94%A8%E5%B1%82%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计算机网络应用层知识清单',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background01.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">techoy的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">计算机网络应用层知识清单</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">计算机网络应用层知识清单</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-25T08:12:14.000Z" title="Created 2025-11-25 16:12:14">2025-11-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-25T08:48:08.860Z" title="Updated 2025-11-25 16:48:08">2025-11-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><hr>
+<h2 id="后端开发常见应用层协议模块拆分与学习路径"><a href="#后端开发常见应用层协议模块拆分与学习路径" class="headerlink" title="后端开发常见应用层协议模块拆分与学习路径"></a><strong>后端开发常见应用层协议模块拆分与学习路径</strong></h2><h2 id="后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块："><a href="#后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块：" class="headerlink" title="后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块："></a>后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块：</h2><h3 id="1-Web服务协议模块"><a href="#1-Web服务协议模块" class="headerlink" title="1. Web服务协议模块"></a><strong>1. Web服务协议模块</strong></h3><h4 id="1-1-HTTP协议族"><a href="#1-1-HTTP协议族" class="headerlink" title="1.1 HTTP协议族"></a><strong>1.1 HTTP协议族</strong></h4><ul>
+<li><strong>HTTP&#x2F;1.1</strong>：<ul>
+<li>核心机制：请求&#x2F;响应模型、无状态、长连接（Keep-Alive）、管道化。</li>
+<li>学习重点：头部字段、状态码、缓存机制、安全头（CORS、CSP）。</li>
+</ul>
+</li>
+<li><strong>HTTP&#x2F;2</strong>：<ul>
+<li>核心机制：多路复用、头部压缩（HPACK）、服务器推送。</li>
+<li>学习重点：性能优化、与HTTP&#x2F;1.1差异、二进制帧结构。</li>
+</ul>
+</li>
+<li><strong>HTTP&#x2F;3（基于QUIC）</strong>：<ul>
+<li>核心机制：基于UDP、0-RTT连接、连接迁移。</li>
+<li>学习重点：与HTTP&#x2F;2差异、QUIC协议原理。</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-WebSocket"><a href="#1-2-WebSocket" class="headerlink" title="1.2 WebSocket"></a><strong>1.2 WebSocket</strong></h4><ul>
+<li>核心机制：全双工通信、持久连接、帧协议。</li>
+<li>应用场景：实时聊天、在线协作、实时推送。</li>
+<li>学习重点：握手过程、帧结构、心跳机制。</li>
+</ul>
+<hr>
+<h3 id="2-RPC（远程过程调用）协议模块"><a href="#2-RPC（远程过程调用）协议模块" class="headerlink" title="2. RPC（远程过程调用）协议模块"></a><strong>2. RPC（远程过程调用）协议模块</strong></h3><h4 id="2-1-gRPC"><a href="#2-1-gRPC" class="headerlink" title="2.1 gRPC"></a><strong>2.1 gRPC</strong></h4><ul>
+<li>核心机制：基于HTTP&#x2F;2、Protobuf序列化、双向流。</li>
+<li>应用场景：微服务间通信、多语言服务。</li>
+<li>学习重点：服务定义、流式RPC、负载均衡。</li>
+</ul>
+<h4 id="2-2-Thrift"><a href="#2-2-Thrift" class="headerlink" title="2.2 Thrift"></a><strong>2.2 Thrift</strong></h4><ul>
+<li>核心机制：自定义IDL、多协议（二进制、JSON）、多语言支持。</li>
+<li>应用场景：跨语言服务、内部系统通信。</li>
+<li>学习重点：接口定义、服务端&#x2F;客户端生成。</li>
+</ul>
+<h4 id="2-3-Dubbo协议"><a href="#2-3-Dubbo协议" class="headerlink" title="2.3 Dubbo协议"></a><strong>2.3 Dubbo协议</strong></h4><ul>
+<li>核心机制：TCP长连接、自定义二进制协议、服务治理。</li>
+<li>应用场景：Java微服务生态。</li>
+<li>学习重点：注册中心、集群容错、SPI机制。</li>
+</ul>
+<hr>
+<h3 id="3-消息队列（MQ）协议模块"><a href="#3-消息队列（MQ）协议模块" class="headerlink" title="3. 消息队列（MQ）协议模块"></a><strong>3. 消息队列（MQ）协议模块</strong></h3><h4 id="3-1-AMQP（Advanced-Message-Queuing-Protocol）"><a href="#3-1-AMQP（Advanced-Message-Queuing-Protocol）" class="headerlink" title="3.1 AMQP（Advanced Message Queuing Protocol）"></a><strong>3.1 AMQP（Advanced Message Queuing Protocol）</strong></h4><ul>
+<li>核心机制：队列、交换机、路由键、事务。</li>
+<li>代表实现：RabbitMQ。</li>
+<li>学习重点：消息模型、可靠性投递、集群。</li>
+</ul>
+<h4 id="3-2-MQTT"><a href="#3-2-MQTT" class="headerlink" title="3.2 MQTT"></a><strong>3.2 MQTT</strong></h4><ul>
+<li>核心机制：发布&#x2F;订阅、轻量级、QoS等级。</li>
+<li>应用场景：物联网、即时通信。</li>
+<li>学习重点：主题（Topic）、遗嘱消息、保活机制。</li>
+</ul>
+<h4 id="3-3-Kafka协议"><a href="#3-3-Kafka协议" class="headerlink" title="3.3 Kafka协议"></a><strong>3.3 Kafka协议</strong></h4><ul>
+<li>核心机制：分布式日志、高吞吐、持久化。</li>
+<li>应用场景：大数据流处理、日志收集。</li>
+<li>学习重点：分区、副本、消费者组。</li>
+</ul>
+<hr>
+<h3 id="4-服务发现与配置协议模块"><a href="#4-服务发现与配置协议模块" class="headerlink" title="4. 服务发现与配置协议模块"></a><strong>4. 服务发现与配置协议模块</strong></h3><h4 id="4-1-DNS"><a href="#4-1-DNS" class="headerlink" title="4.1 DNS"></a><strong>4.1 DNS</strong></h4><ul>
+<li>核心机制：域名解析、记录类型（A、CNAME、SRV）。</li>
+<li>学习重点：递归&#x2F;迭代查询、缓存、DNSSEC。</li>
+</ul>
+<h4 id="4-2-Consul-Nacos协议"><a href="#4-2-Consul-Nacos协议" class="headerlink" title="4.2 Consul&#x2F;Nacos协议"></a><strong>4.2 Consul&#x2F;Nacos协议</strong></h4><ul>
+<li>核心机制：服务注册、健康检查、配置分发。</li>
+<li>学习重点：CAP理论、一致性协议（Raft）、服务网格集成。</li>
+</ul>
+<hr>
+<h3 id="5-数据库通信协议模块"><a href="#5-数据库通信协议模块" class="headerlink" title="5. 数据库通信协议模块"></a><strong>5. 数据库通信协议模块</strong></h3><h4 id="5-1-MySQL协议"><a href="#5-1-MySQL协议" class="headerlink" title="5.1 MySQL协议"></a><strong>5.1 MySQL协议</strong></h4><ul>
+<li>核心机制：文本&#x2F;二进制协议、连接池、预处理语句。</li>
+<li>学习重点：认证过程、命令报文、事务控制。</li>
+</ul>
+<h4 id="5-2-Redis协议"><a href="#5-2-Redis协议" class="headerlink" title="5.2 Redis协议"></a><strong>5.2 Redis协议</strong></h4><ul>
+<li>核心机制：RESP（Redis Serialization Protocol）、命令行格式。</li>
+<li>学习重点：管道、发布&#x2F;订阅、Lua脚本。</li>
+</ul>
+<hr>
+<h3 id="6-实时音视频协议模块"><a href="#6-实时音视频协议模块" class="headerlink" title="6. 实时音视频协议模块"></a><strong>6. 实时音视频协议模块</strong></h3><h4 id="6-1-RTMP"><a href="#6-1-RTMP" class="headerlink" title="6.1 RTMP"></a><strong>6.1 RTMP</strong></h4><ul>
+<li>核心机制：基于TCP、分块传输、低延迟。</li>
+<li>应用场景：直播推流。</li>
+<li>学习重点：握手过程、消息类型。</li>
+</ul>
+<h4 id="6-2-WebRTC"><a href="#6-2-WebRTC" class="headerlink" title="6.2 WebRTC"></a><strong>6.2 WebRTC</strong></h4><ul>
+<li>核心机制：P2P、NAT穿透、SRTP加密。</li>
+<li>应用场景：视频会议、实时通话。</li>
+<li>学习重点：信令服务器、ICE&#x2F;STUN&#x2F;TURN。</li>
+</ul>
+<hr>
+<h2 id="学习路径建议"><a href="#学习路径建议" class="headerlink" title="学习路径建议"></a><strong>学习路径建议</strong></h2><ol>
+<li><strong>先掌握HTTP&#x2F;1.1</strong>：<ul>
+<li>使用<code>curl</code>、<code>Wireshark</code>抓包分析。</li>
+<li>学习RESTful API设计。</li>
+</ul>
+</li>
+<li><strong>深入HTTP&#x2F;2、HTTP&#x2F;3</strong>：<ul>
+<li>搭建Nginx环境，开启HTTP&#x2F;2。</li>
+<li>使用<code>nghttp</code>等工具分析帧结构。</li>
+</ul>
+</li>
+<li><strong>实践RPC</strong>：<ul>
+<li>编写gRPC Demo，体验流式通信。</li>
+<li>对比Thrift、Dubbo的优劣。</li>
+</ul>
+</li>
+<li><strong>消息队列实战</strong>：<ul>
+<li>用RabbitMQ实现可靠消息投递。</li>
+<li>用Kafka实现日志流处理。</li>
+</ul>
+</li>
+<li><strong>服务治理</strong>：<ul>
+<li>搭建Consul集群，实现服务注册与发现。</li>
+</ul>
+</li>
+<li><strong>数据库协议</strong>：<ul>
+<li>用<code>tcpdump</code>抓取MySQL&#x2F;Redis通信报文。</li>
+</ul>
+</li>
+<li><strong>音视频</strong>：<ul>
+<li>搭建WebRTC P2P通话Demo。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="工具与资源推荐"><a href="#工具与资源推荐" class="headerlink" title="工具与资源推荐"></a><strong>工具与资源推荐</strong></h2><ul>
+<li><strong>抓包分析</strong>：Wireshark、tcpdump、Charles。</li>
+<li><strong>协议文档</strong>：RFC（如RFC 2616 HTTP&#x2F;1.1）、MDN Web Docs。</li>
+<li><strong>官方文档</strong>：gRPC、RabbitMQ、Nginx、Kafka官网。</li>
+<li><strong>实战项目</strong>：搭建微服务网关、实现消息总线、设计实时通信系统。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">techoy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/25/%E5%BA%94%E7%94%A8%E5%B1%82%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95/">http://example.com/2025/11/25/%E5%BA%94%E7%94%A8%E5%B1%82%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8E%9F%E7%90%86/">原理</a></div><div class="post-share"><div class="social-share" data-image="/image/wechat.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/25/%E8%AF%A6%E8%A7%A3Redis-Pub-Sub%E6%9C%8D%E5%8A%A1/" title="详解Redis Pub-Sub服务"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">详解Redis Pub-Sub服务</div></div><div class="info-2"><div class="info-item-1">在聊天应用中，这是实现实时消息广播的核心机制。我们将从三个层面来深入探讨：  通用原理：什么是 Pub&#x2F;Sub？ Redis 实现：Redis 是如何实现 Pub&#x2F;Sub 的？ 在聊天应用中的具体应用：代码是如何工作的？   1. 通用原理：解耦的艺术发布&#x2F;订阅模式是一种消息通信范式，它的目标是解耦消息的发送者（发布者）和接收者（订阅者）。想象一下报纸投递系统：  发布者：报社。它只管印报纸，然后扔到特定的邮筒（频道）里。 订阅者：你。你告诉邮递员你对哪些邮筒（频道）感兴趣。 频道：邮筒，比如“体育新闻邮筒”、“财经新闻邮筒”。 消息：报纸。核心特点： 解耦：报社（发布者）完全不知道是谁（订阅者）在订阅，甚至不知道有多少人订阅。它只管向邮筒（频道）里投递（发布）报纸（消息）。 异步：发布者发布消息后，不需要等待订阅者接收。消息的传递是异步的。 一对多：一个消息可以被多个订阅者同时接收。这种模式在软件架构中带来了巨大的好处，特别是系统扩展性和灵活性的提升。   2. Redis 实现：轻量级的实时消息总线Redis 内置了强大的 Pub&#x2F;Su...</div></div></div></a><a class="pagination-related" href="/2025/11/25/my-async%E6%A0%B8%E5%BF%83%E9%83%A8%E4%BB%B6%E4%B8%B2%E8%AE%B2/" title="my_async核心部件串讲"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">my_async核心部件串讲</div></div><div class="info-2"><div class="info-item-1">一个完整的例子：用户数据处理假设我们要实现一个功能：获取一个用户的数据，如果成功，再获取该用户的帖子列表。这两个操作都是异步的，并且都可能失败。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140#include &lt;iostream&gt;#include &lt;string&gt;#include &lt;vector&gt;#include &lt;optional&gt;#include &lt;cor...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/wechat.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">techoy</div><div class="author-info-description">在校学生、二次元爱好者、C++码农</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/loveTheresia"><i class="fab fa-github"></i><span>github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to techoy's blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97%E6%8B%86%E5%88%86%E4%B8%8E%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84"><span class="toc-number">1.</span> <span class="toc-text">后端开发常见应用层协议模块拆分与学习路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E6%B6%89%E5%8F%8A%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE%E4%BC%97%E5%A4%9A%EF%BC%8C%E4%B8%BA%E4%BA%86%E4%BE%BF%E4%BA%8E%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%EF%BC%8C%E5%8F%AF%E6%8C%89%E5%8A%9F%E8%83%BD%E9%A2%86%E5%9F%9F%E6%8B%86%E5%88%86%E4%B8%BA%E4%BB%A5%E4%B8%8B%E5%87%A0%E5%A4%A7%E6%A8%A1%E5%9D%97%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">后端开发涉及的应用层协议众多，为了便于系统学习，可按功能领域拆分为以下几大模块：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Web%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.1.</span> <span class="toc-text">1. Web服务协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-HTTP%E5%8D%8F%E8%AE%AE%E6%97%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1 HTTP协议族</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-WebSocket"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.2 WebSocket</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-RPC%EF%BC%88%E8%BF%9C%E7%A8%8B%E8%BF%87%E7%A8%8B%E8%B0%83%E7%94%A8%EF%BC%89%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.2.</span> <span class="toc-text">2. RPC（远程过程调用）协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-gRPC"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.1 gRPC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Thrift"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2 Thrift</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-Dubbo%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.3 Dubbo协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.3.</span> <span class="toc-text">3. 消息队列（MQ）协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-AMQP%EF%BC%88Advanced-Message-Queuing-Protocol%EF%BC%89"><span class="toc-number">2.3.1.</span> <span class="toc-text">3.1 AMQP（Advanced Message Queuing Protocol）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-MQTT"><span class="toc-number">2.3.2.</span> <span class="toc-text">3.2 MQTT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-Kafka%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.3.3.</span> <span class="toc-text">3.3 Kafka协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E4%B8%8E%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.4.</span> <span class="toc-text">4. 服务发现与配置协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-DNS"><span class="toc-number">2.4.1.</span> <span class="toc-text">4.1 DNS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-Consul-Nacos%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.4.2.</span> <span class="toc-text">4.2 Consul&#x2F;Nacos协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.5.</span> <span class="toc-text">5. 数据库通信协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-MySQL%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.5.1.</span> <span class="toc-text">5.1 MySQL协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-Redis%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.5.2.</span> <span class="toc-text">5.2 Redis协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%AE%9E%E6%97%B6%E9%9F%B3%E8%A7%86%E9%A2%91%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.6.</span> <span class="toc-text">6. 实时音视频协议模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-RTMP"><span class="toc-number">2.6.1.</span> <span class="toc-text">6.1 RTMP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-WebRTC"><span class="toc-number">2.6.2.</span> <span class="toc-text">6.2 WebRTC</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">学习路径建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E4%B8%8E%E8%B5%84%E6%BA%90%E6%8E%A8%E8%8D%90"><span class="toc-number">4.</span> <span class="toc-text">工具与资源推荐</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/epoll%E8%AF%A6%E8%A7%A3/" title="epoll详解">epoll详解</a><time datetime="2025-11-25T09:05:46.000Z" title="Created 2025-11-25 17:05:46">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/%E6%9C%89%E6%A0%88%E6%97%A0%E6%A0%88%E3%80%81%E5%AF%B9%E7%A7%B0%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%9A%84%E5%85%B3%E7%B3%BB/" title="有栈无栈、对称非对称的关系">有栈无栈、对称非对称的关系</a><time datetime="2025-11-25T09:02:11.000Z" title="Created 2025-11-25 17:02:11">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/C-boost%E5%BA%93%E5%8D%8F%E7%A8%8B/" title="C++boost库协程">C++boost库协程</a><time datetime="2025-11-25T09:00:39.000Z" title="Created 2025-11-25 17:00:39">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/static%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" title="static关键字详解">static关键字详解</a><time datetime="2025-11-25T08:59:42.000Z" title="Created 2025-11-25 16:59:42">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/promise-type-%E5%92%8C-TaskAwaiter-%E7%9A%84%E5%85%B3%E7%B3%BB/" title="promise_type 和 TaskAwaiter 的关系">promise_type 和 TaskAwaiter 的关系</a><time datetime="2025-11-25T08:58:44.000Z" title="Created 2025-11-25 16:58:44">2025-11-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By techoy</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script async data-pjax src="/"></script></div></body></html>

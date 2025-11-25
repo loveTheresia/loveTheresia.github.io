@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>协程库关键字使用 | techoy的个人博客</title><meta name="author" content="techoy"><meta name="copyright" content="techoy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="co_await、co_yield、co_return、co_spawn、co_sleep用法好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是 C++20 语言标准的一部分，哪些是库提供的功能。C++20 标准协程关键字这三个是 C++20 语言本身定义的关键字，是构成协程语法的核心。 1. co_await：等待与挂起 类型：C++20 关键字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="协程库关键字使用">
+<meta property="og:url" content="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="techoy的个人博客">
+<meta property="og:description" content="co_await、co_yield、co_return、co_spawn、co_sleep用法好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是 C++20 语言标准的一部分，哪些是库提供的功能。C++20 标准协程关键字这三个是 C++20 语言本身定义的关键字，是构成协程语法的核心。 1. co_await：等待与挂起 类型：C++20 关键字">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image/wechat.jpg">
+<meta property="article:published_time" content="2025-11-25T08:58:00.000Z">
+<meta property="article:modified_time" content="2025-11-25T08:58:27.813Z">
+<meta property="article:author" content="techoy">
+<meta property="article:tag" content="协程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/wechat.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "协程库关键字使用",
+  "url": "http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%BF%E7%94%A8/",
+  "image": "http://example.com/image/wechat.jpg",
+  "datePublished": "2025-11-25T08:58:00.000Z",
+  "dateModified": "2025-11-25T08:58:27.813Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "techoy",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '协程库关键字使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background01.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">techoy的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">协程库关键字使用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">协程库关键字使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-25T08:58:00.000Z" title="Created 2025-11-25 16:58:00">2025-11-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-25T08:58:27.813Z" title="Updated 2025-11-25 16:58:27">2025-11-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="co-await、co-yield、co-return、co-spawn、co-sleep用法"><a href="#co-await、co-yield、co-return、co-spawn、co-sleep用法" class="headerlink" title="co_await、co_yield、co_return、co_spawn、co_sleep用法"></a>co_await、co_yield、co_return、co_spawn、co_sleep用法</h1><h2 id="好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是-C-20-语言标准的一部分，哪些是库提供的功能。"><a href="#好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是-C-20-语言标准的一部分，哪些是库提供的功能。" class="headerlink" title="好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是 C++20 语言标准的一部分，哪些是库提供的功能。"></a>好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是 C++20 语言标准的一部分，哪些是库提供的功能。</h2><h3 id="C-20-标准协程关键字"><a href="#C-20-标准协程关键字" class="headerlink" title="C++20 标准协程关键字"></a>C++20 标准协程关键字</h3><p>这三个是 C++20 语言本身定义的关键字，是构成协程语法的核心。</p>
+<h4 id="1-co-await：等待与挂起"><a href="#1-co-await：等待与挂起" class="headerlink" title="1. co_await：等待与挂起"></a>1. <code>co_await</code>：等待与挂起</h4><ul>
+<li><strong>类型</strong>：C++20 <strong>关键字</strong></li>
+<li><strong>核心作用</strong>：<strong>挂起当前协程，等待一个异步操作完成</strong>。当操作完成后，协程会从挂起点恢复执行。</li>
+<li><strong>使用场景</strong>：当你的协程需要执行一个耗时的操作，如网络 I&#x2F;O、文件读写、定时器等待等，你不想阻塞线程时，就使用它。</li>
+<li><strong>绝佳比喻</strong>：你（协程）把衣服放进洗衣机（异步操作），然后按下启动键（<code>co_await</code>）。你不会站在洗衣机前傻等，而是转身去看电视（线程去执行其他协程）。洗衣机洗完后（操作完成），它会“叮”一声通知你，你再回来把衣服拿出来（协程恢复）。</li>
+<li><strong>代码示例 (Boost.Asio)</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 等待1秒，期间线程可以做其他事</span></span><br><span class="line">boost::<span class="function">asio::steady_timer <span class="title">timer</span><span class="params">(ctx, std::chrono::seconds(<span class="number">1</span>))</span></span>;</span><br><span class="line"><span class="keyword">co_await</span> timer.<span class="built_in">async_wait</span>(boost::asio::use_awaitable); </span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;1秒已过&quot;</span> &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-co-yield：产出与暂停"><a href="#2-co-yield：产出与暂停" class="headerlink" title="2. co_yield：产出与暂停"></a>2. <code>co_yield</code>：产出与暂停</h4><ul>
+<li><strong>类型</strong>：C++20 <strong>关键字</strong></li>
+<li><strong>核心作用</strong>：<strong>从协程中返回一个值，但协程并不结束，而是暂停</strong>。下次被调用时，协程会从暂停点继续执行。</li>
+<li><strong>使用场景</strong>：主要用于实现<strong>生成器</strong>。当你需要从一个函数中分批、多次地产生数据序列时，它比返回一个完整的容器更节省内存。</li>
+<li><strong>绝佳比喻</strong>：一个流水线上的工人（协程）。他做好一个零件（<code>co_yield part</code>），就把零件递出去，然后继续做下一个。他不会做完所有零件再一次性交货。</li>
+<li><strong>代码示例 (概念性)</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成斐波那契数列的生成器</span></span><br><span class="line"><span class="function">Generator&lt;<span class="type">int</span>&gt; <span class="title">fibonacci</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">0</span>, b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">co_yield</span> a; <span class="comment">// 返回 a，然后暂停</span></span><br><span class="line">        <span class="type">int</span> tmp = a + b;</span><br><span class="line">        a = b;</span><br><span class="line">        b = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-co-return：结束与返回"><a href="#3-co-return：结束与返回" class="headerlink" title="3. co_return：结束与返回"></a>3. <code>co_return</code>：结束与返回</h4><ul>
+<li><strong>类型</strong>：C++20 <strong>关键字</strong></li>
+<li><strong>核心作用</strong>：<strong>结束当前协程的执行，并可以返回一个最终结果</strong>。它标志着协程生命周期的终结。</li>
+<li><strong>使用场景</strong>：当协程完成了它的所有任务，需要返回一个最终的计算结果或状态时。</li>
+<li><strong>绝佳比喻</strong>：厨师（协程）做完最后一道菜，把它端上桌，然后宣布“今天收工了”（<code>co_return</code>）。</li>
+<li><strong>代码示例</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">boost::<span class="function">asio::awaitable&lt;<span class="type">int</span>&gt; <span class="title">compute_answer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ... 经过一系列复杂的异步计算 ...</span></span><br><span class="line">    <span class="keyword">co_return</span> <span class="number">42</span>; <span class="comment">// 协程结束，返回最终答案 42</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="协程库提供的函数-概念"><a href="#协程库提供的函数-概念" class="headerlink" title="协程库提供的函数&#x2F;概念"></a>协程库提供的函数&#x2F;概念</h3><p>这些不是 C++20 标准的一部分，而是由流行的协程库（如 Boost.Asio）提供的便利函数，极大地简化了协程的使用。</p>
+<h4 id="4-co-spawn：启动与调度"><a href="#4-co-spawn：启动与调度" class="headerlink" title="4. co_spawn：启动与调度"></a>4. <code>co_spawn</code>：启动与调度</h4><ul>
+<li><strong>类型</strong>：<strong>函数</strong> (最著名的是 Boost.Asio 中的函数)</li>
+<li><strong>核心作用</strong>：<strong>创建并启动一个新的协程任务</strong>，将其提交给 I&#x2F;O 上下文（事件循环）去调度执行。</li>
+<li><strong>使用场景</strong>：当你有一个任务（通常是一个 lambda 或返回 <code>awaitable</code> 的函数），想让它“在后台”作为一个协程跑起来时。</li>
+<li><strong>绝佳比喻</strong>：餐厅经理（主程序）看到菜单上来了新订单（一个任务），他用 <code>co_spawn</code> 把这个任务<strong>分配</strong>给一个空闲的厨师（启动一个新协程）。</li>
+<li><strong>代码示例 (Boost.Asio)</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启动一个后台协程来处理连接，不关心其结果</span></span><br><span class="line"><span class="built_in">co_spawn</span>(ctx, <span class="built_in">handle_connection</span>(std::<span class="built_in">move</span>(socket)), boost::asio::detached);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-co-sleep：协程式睡眠"><a href="#5-co-sleep：协程式睡眠" class="headerlink" title="5. co_sleep：协程式睡眠"></a>5. <code>co_sleep</code>：协程式睡眠</h4><ul>
+<li><strong>类型</strong>：<strong>库函数&#x2F;概念</strong> (并非所有库都有，但很常见)</li>
+<li><strong>核心作用</strong>：<strong>让当前协程暂停指定的时间</strong>。这是一个语法糖，其底层实现通常是创建一个定时器并 <code>co_await</code> 它。</li>
+<li><strong>使用场景</strong>：需要延迟执行某些操作，或者实现心跳、定时任务等。</li>
+<li><strong>绝佳比喻</strong>：你（协程）想午睡5分钟。你设了个闹钟（<code>co_sleep</code>），然后就去睡了。闹钟响后，你醒来继续工作。这期间，你的身体（线程）可能被拿去干别了。</li>
+<li><strong>代码示例 (概念性)</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 很多库会提供这样的便利函数</span></span><br><span class="line"><span class="built_in">co_sleep</span>(<span class="number">5</span>); <span class="comment">// 暂停5秒</span></span><br><span class="line"><span class="comment">// 在 Boost.Asio 中，它的等价实现是：</span></span><br><span class="line">boost::<span class="function">asio::steady_timer <span class="title">timer</span><span class="params">(ctx, std::chrono::seconds(<span class="number">5</span>))</span></span>;</span><br><span class="line"><span class="keyword">co_await</span> timer.<span class="built_in">async_wait</span>(boost::asio::use_awaitable);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="总结与关系图谱"><a href="#总结与关系图谱" class="headerlink" title="总结与关系图谱"></a>总结与关系图谱</h3><table>
+<thead>
+<tr>
+<th align="left">关键字&#x2F;函数</th>
+<th align="left">类型</th>
+<th align="left">核心作用</th>
+<th align="left">比喻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>co_await</code></strong></td>
+<td align="left">C++20 关键字</td>
+<td align="left"><strong>等待</strong>，挂起协程</td>
+<td align="left">等洗衣机洗完</td>
+</tr>
+<tr>
+<td align="left"><strong><code>co_yield</code></strong></td>
+<td align="left">C++20 关键字</td>
+<td align="left"><strong>产出</strong>，暂停并返回值</td>
+<td align="left">流水线递出零件</td>
+</tr>
+<tr>
+<td align="left"><strong><code>co_return</code></strong></td>
+<td align="left">C++20 关键字</td>
+<td align="left"><strong>结束</strong>，返回最终结果</td>
+<td align="left">厨师宣布收工</td>
+</tr>
+<tr>
+<td align="left"><strong><code>co_spawn</code></strong></td>
+<td align="left">库函数</td>
+<td align="left"><strong>启动</strong>，创建新协程</td>
+<td align="left">经理分配任务</td>
+</tr>
+<tr>
+<td align="left"><strong><code>co_sleep</code></strong></td>
+<td align="left">库函数&#x2F;概念</td>
+<td align="left"><strong>睡眠</strong>，暂停指定时间</td>
+<td align="left">设闹钟午睡</td>
+</tr>
+<tr>
+<td align="left"><strong>它们如何协同工作？</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">一个典型的协程应用流程是这样的：</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ol>
+<li>在 <code>main</code> 函数中，使用 <strong><code>co_spawn</code></strong> 启动一个顶层协程。</li>
+<li>在这个协程（或它启动的其他协程）内部，使用 <strong><code>co_await</code></strong> 来等待各种异步 I&#x2F;O 或定时器（可能封装在 <strong><code>co_sleep</code></strong> 中）。</li>
+<li>如果这个协程是一个生成器，它会使用 <strong><code>co_yield</code></strong> 来多次产生数据。</li>
+<li>当任务全部完成，协程使用 <strong><code>co_return</code></strong> 来结束自己的生命并返回结果。<br>记住这个分类：<strong><code>co_await</code>, <code>co_yield</code>, <code>co_return</code> 是协程的“动词”，定义了协程内部的行为；而 <code>co_spawn</code> 是启动协程的“动词”，定义了协程如何被创建和管理。</strong></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">techoy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%BF%E7%94%A8/">http://example.com/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8D%8F%E7%A8%8B/">协程</a></div><div class="post-share"><div class="social-share" data-image="/image/wechat.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/25/promise-type-%E5%92%8C-TaskAwaiter-%E7%9A%84%E5%85%B3%E7%B3%BB/" title="promise_type 和 TaskAwaiter 的关系"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">promise_type 和 TaskAwaiter 的关系</div></div><div class="info-2"><div class="info-item-1">promise_type 和 TaskAwaiter 的关系这是一个非常棒的问题，它触及了 C++20 协程实现中最核心、最精妙的关系。简单来说，promise_type 和 TaskAwaiter 是协程内部控制器和协程间通信桥梁的关系。它们不是父子或组合关系，而是一种为了完成“等待一个协程”这个任务而紧密协作的双向契约。让我们用一个比喻来理解：  promise_type：是一个被调用协程的内部经理。它全权负责这个协程的内部事务：如何开始、如何处理返回值、如何处理异常、以及结束后该做什么。 TaskAwaiter：是一个外部协调员。当一个调用者协程想要等待这个被调用协程时，这个协调员就被创建出来，负责在两者之间传递消息和结果。   它们如何协作：一次完整的 co_await 生命周期假设我们有以下代码： 1234567Task&lt;int&gt; inner_task() &#123;    co_return 42;&#125;Task&lt;void&gt; outer_task() &#123;    int result = co_await inner_task(...</div></div></div></a><a class="pagination-related" href="/2025/11/25/%E5%8D%8F%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%99%A8/" title="协程定时器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">协程定时器</div></div><div class="info-2"><div class="info-item-1">co_await coSleep(500ns) 是一个触发用户协程和定时器协程切换的语句吗这是一个非常好的问题，它触及了整个异步模型的核心！答案是：不，这并不是用户协程和一个“定时器协程”之间的切换。这种理解很常见，但这个设计的精妙之处恰恰在于它没有创建一个专门的、持续运行的“定时器协程”。如果那样做，就会有一个协程一直在循环检查时间，这会浪费 CPU 资源，是一种低效的“轮询”模式。真正的原理是：用户协程、事件循环和操作系统内核三者之间的协作。让我们把这个过程分解一下，看看“切换”到底发生在哪里。三个关键角色 用户协程: 你写的那个执行 co_await coSleep(500ns) 的协程。 事件循环: 这是一个在主线程上运行的循环（代码中未完全展示，但 runDuration 是它的一部分）。它是所有协程的“调度器”。 操作系统内核: 这是唯一能真正让 CPU 进入休眠并在精确时间后唤醒它的组件。   完整的“切换”流程让我们用“设置一个 500 纳秒后响的闹钟”来类比： 1. 挂起 - 协程 -&gt; 事件循环 你的用户协程执行到 co_await coSleep(50...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/wechat.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">techoy</div><div class="author-info-description">在校学生、二次元爱好者、C++码农</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/loveTheresia"><i class="fab fa-github"></i><span>github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to techoy's blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#co-await%E3%80%81co-yield%E3%80%81co-return%E3%80%81co-spawn%E3%80%81co-sleep%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">co_await、co_yield、co_return、co_spawn、co_sleep用法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%BD%E7%9A%84%EF%BC%8C%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%A3%92%E7%9A%84%E6%80%BB%E7%BB%93%E6%80%A7%E9%97%AE%E9%A2%98%EF%BC%81%E8%BF%99%E4%BA%9B%E5%85%B3%E9%94%AE%E5%AD%97%E5%92%8C%E5%87%BD%E6%95%B0%E6%98%AF%E5%8D%8F%E7%A8%8B%E7%BC%96%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3%E3%80%82%E6%88%91%E4%BB%AC%E6%9D%A5%E9%80%90%E4%B8%80%E5%88%86%E8%A7%A3%EF%BC%8C%E5%B9%B6%E6%98%8E%E7%A1%AE%E5%8C%BA%E5%88%86%E5%93%AA%E4%BA%9B%E6%98%AF-C-20-%E8%AF%AD%E8%A8%80%E6%A0%87%E5%87%86%E7%9A%84%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%8C%E5%93%AA%E4%BA%9B%E6%98%AF%E5%BA%93%E6%8F%90%E4%BE%9B%E7%9A%84%E5%8A%9F%E8%83%BD%E3%80%82"><span class="toc-number">1.1.</span> <span class="toc-text">好的，这是一个非常棒的总结性问题！这些关键字和函数是协程编程的基石。我们来逐一分解，并明确区分哪些是 C++20 语言标准的一部分，哪些是库提供的功能。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C-20-%E6%A0%87%E5%87%86%E5%8D%8F%E7%A8%8B%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">1.1.1.</span> <span class="toc-text">C++20 标准协程关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-co-await%EF%BC%9A%E7%AD%89%E5%BE%85%E4%B8%8E%E6%8C%82%E8%B5%B7"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">1. co_await：等待与挂起</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-co-yield%EF%BC%9A%E4%BA%A7%E5%87%BA%E4%B8%8E%E6%9A%82%E5%81%9C"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">2. co_yield：产出与暂停</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-co-return%EF%BC%9A%E7%BB%93%E6%9D%9F%E4%B8%8E%E8%BF%94%E5%9B%9E"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">3. co_return：结束与返回</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E7%A8%8B%E5%BA%93%E6%8F%90%E4%BE%9B%E7%9A%84%E5%87%BD%E6%95%B0-%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">协程库提供的函数&#x2F;概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-co-spawn%EF%BC%9A%E5%90%AF%E5%8A%A8%E4%B8%8E%E8%B0%83%E5%BA%A6"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">4. co_spawn：启动与调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-co-sleep%EF%BC%9A%E5%8D%8F%E7%A8%8B%E5%BC%8F%E7%9D%A1%E7%9C%A0"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">5. co_sleep：协程式睡眠</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E5%85%B3%E7%B3%BB%E5%9B%BE%E8%B0%B1"><span class="toc-number">1.1.3.</span> <span class="toc-text">总结与关系图谱</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/epoll%E8%AF%A6%E8%A7%A3/" title="epoll详解">epoll详解</a><time datetime="2025-11-25T09:05:46.000Z" title="Created 2025-11-25 17:05:46">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/%E6%9C%89%E6%A0%88%E6%97%A0%E6%A0%88%E3%80%81%E5%AF%B9%E7%A7%B0%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%9A%84%E5%85%B3%E7%B3%BB/" title="有栈无栈、对称非对称的关系">有栈无栈、对称非对称的关系</a><time datetime="2025-11-25T09:02:11.000Z" title="Created 2025-11-25 17:02:11">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/C-boost%E5%BA%93%E5%8D%8F%E7%A8%8B/" title="C++boost库协程">C++boost库协程</a><time datetime="2025-11-25T09:00:39.000Z" title="Created 2025-11-25 17:00:39">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/static%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" title="static关键字详解">static关键字详解</a><time datetime="2025-11-25T08:59:42.000Z" title="Created 2025-11-25 16:59:42">2025-11-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/25/promise-type-%E5%92%8C-TaskAwaiter-%E7%9A%84%E5%85%B3%E7%B3%BB/" title="promise_type 和 TaskAwaiter 的关系">promise_type 和 TaskAwaiter 的关系</a><time datetime="2025-11-25T08:58:44.000Z" title="Created 2025-11-25 16:58:44">2025-11-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By techoy</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script async data-pjax src="/"></script></div></body></html>
